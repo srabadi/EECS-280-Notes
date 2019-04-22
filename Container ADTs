@@ -7,3 +7,4 @@ CONTAINER ADTs
   * without static every object would have its own copy located in memory
 * size_t type represents only nonnegative integers and is large enough to hold the zise of any object
 * can write our own default constructor to initialize member variables
+* use binary search to eliminate half the search space
