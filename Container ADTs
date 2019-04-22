@@ -1,0 +1,9 @@
+CONTAINER ADTs
+
+* a container is an abstract data type whose purpose is to hold objects of some other type
+* public interface includes and default constructor and member functions
+* static const indicates that the given member is not associated with an object of the class, but with the whole class itself
+  * for a member value: there is a single copy of that variable in the program located in static storage
+  * without static every object would have its own copy located in memory
+* size_t type represents only nonnegative integers and is large enough to hold the zise of any object
+* can write our own default constructor to initialize member variables
