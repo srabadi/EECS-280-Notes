@@ -1,0 +1,38 @@
+POINTERS
+
+* & (reference, “address-of”) operator can be applied to an object to determine its address
+
+  int main() {
+    int x = 3;
+    double y = 5.5;
+    cout << &x << endl; //example: 0x1000
+    cout << &y << endl; //example: 0x1004
+  }
+
+* addresses can be stores in pointers (object)
+  * pointer variable declared by placing a * to the left of the variable name
+  
+    int x = 3;
+    int *ptr = &x;
+    cout << ptr << endl; //sample: 0x1000
+    
+  * pointer type consists of two elements:
+    1. type of the objects whose addresses the pointer can hold as a value
+    2. * symbol indicates that the type is a pointer
+* pointers can be derferenced to obtain the object whose address the pointer is holding
+    
+    int x = 3;
+    int y = 4;
+    int *ptr = &x;
+    cout << *ptr << endl; //prints 3
+    ptr = &y;
+    cout << *ptr << endl; //prints 4
+    
+* pointers are default initialized to to an undefined value
+  * derefrencing a default-initialized pointer results in undefined behavior
+* null pointer holds an address value of 0x0 which no object can be located at
+  * derefrencing results in undefined behavior
+* pointers allow us to work indirectly with objects
+* referneces can also be used to indirectly refer to other objects (aliases, just another name)
+  * association to the object cannot be broken
+  
