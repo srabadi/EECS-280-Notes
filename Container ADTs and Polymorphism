@@ -1,0 +1,41 @@
+CONTAINER ADTs AND POLYMORPHISM
+
+* C++ allows operators to be applied to class types through operator overloading
+  * requires at least one of the operands to be of class type
+* function name operator followed by symbol
+* can just call the operator
+* most cases pass by refernece to avoid copy but can be passed by value
+* must use a top-level function to overload when:
+  * first operand is of atomic type (doesn't have member variables)
+  * first operand is of class type that we do not have access to the class definition (example: overloading       ostream <<)
+* if the overload needs access to private members, a member function would have to access because it is part of the class
+* some operators can be overloaded as member functions (=, (), [], ->)
+* templates allow us to spevify type arguments, write a generic version
+
+  template <typename T>
+  class UnsortedSet {
+    ...
+  };
+
+* compiler instantiates a specific version of the code by substituting arguments for the parameters and compiling the resulting code
+* template may have more than one parameter
+* pass objects of a template parameter by reference to avoid copying potentially large objects
+* can define a function as a template, resulting in a function template
+* to use a member function we wrote instead of the standard library use the scope-resolution operator with nothing to the left
+* for class and function templates, the compiler must actually instantiate the definitions fo each set of template arguments, so we must arrange 
+* include guards to allow the compiler to ignore the code if the header is included a second time
+  * #ifndef and #define to open, #endif closes it
+* avoid dynamic polymorphism with containers
+* type alias is a new name for an existing type and can be introduced using a declaration
+  
+  using UnsortedIntSet = UnsortedSet<int>;
+
+* a using declaration can also define an alias template which introduces a new name that is a template for a set of types
+  
+  template <typename T>
+  using Set = UnsortedSet<T>;
+  
+* a factory function creates an object of the appropriate derived type and returns a pointer to it
+  * created in dynamic memory with the new operator
+  * use the delete operator on the object's address when we no longer need it
+  
