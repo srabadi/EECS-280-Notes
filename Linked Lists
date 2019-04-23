@@ -1,0 +1,50 @@
+LINKED LISTS
+
+* a sequential container is a container that holds elements and allows them to be accessed in sequential order
+  * elements store contiguously makes random access efficient (use pointer arithmetic, same time)
+* better to give up contiguous memory and explicitly keep track of where the next elements is through a pointer
+  * need to keep track of both the datum itself and a pointer to the next pieve of the sequence
+  * heterogeneous data, use a node class-type object to keep track of the two values:
+    
+    struct Node {
+      int datum; //can be a template
+      Node *next; //pointer to the next node in the sequence
+    };
+
+* use a null pointer as a sentinel denoting the end of the sequence, storing the next pointer of the last node
+* linked list: the sequence of nodes, consists of a list of items linked togetehr by pointers
+* Node in a bigger ADT that keeps track of the location of the first Node
+  * can get to the others by following next pointers
+    
+    classs IntList {
+      ...
+    private:
+      Node *first;
+    }
+    
+* Node objects must be in dynamic memory since objects are stored directly from the ADT object and the ADT must ensure that their memory is properly managed
+* default constructor to make the list empty, push_front(), front(), print(), pop_front(), empty()
+  * Node does not appear here, it is an implementation detail (private member, nested class)
+  
+  Class IntList {
+    ...
+  private:
+    struct Node {
+      int datum;
+      Node *next;
+    };
+    
+    Node *first;
+  }
+  
+* first is either null or a pointer to a valid Node, the next member of all but the last node points to another valid Node, the next member of the last node is full
+* iterating over a linked list's elements from outside the class requires an iterator abstraction
+* inserting an element into a list allocates a Node in dynamic memory, so the list must properly manage the node objects to avoid a memory leak
+  * pop_all() (free elements and nodes), push_all(const ADT &other) (copy all elements from another list)
+* doubly linked list: each node has two linkes, one the the previous node and one to the next node
+* pass a function parameter by reference if the function parameter's type is a template parameter, since the latter may be instantiated with a large class type
+  
+
+
+
+
