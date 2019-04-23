@@ -4,6 +4,31 @@ MANAGING DYNAMIC MEMORY
   * arrange for the constructor to allocate a resource 
   * arrange for thedestructor to release the resource ( deletes the dynamic memory that it had previously allocated so memory does not leak)
 * RAII allows us the leverage automatic memory management and a class-type object to successfully manage a dyname array (or dynamic memory in general)
-
-    
-    
+* grow() doubles the capacity of the set
+ * allocate a new dynamic array, copy over the elements, and discard the old array
+  
+  void UnsortedSet<T>::grow() {
+   T *new_arr = new T[2 * capacity]; //allocate a new array that is twice as big
+   for (int i = 0; i < num_elements; ++i) { //copy the elements to the new array
+    new_arr[i] = elements[i];
+   }
+   capacity *= 2; //update capacity
+   delete[] elements; //free the old array
+   elements = new_arr; //set elements to point to first element of the new array
+  }
+  
+* the destructor does not cause the object to die, the object dies when its lifetime dies:
+ * local variable --> when the variable goes out of scope
+ * static variable --> when the program ends
+ * member of a class-type object --> when the latter object dies
+ * element of an array --> when the array dies
+ * dynamic object --> when delete is applied to its address
+* destructor just runs when the object dies
+ * gives the object a chance to put its affairs in order while it is on its death bed
+ * if the object is managing dynamic memory, it needs to release that memory
+ 
+ template <typename T> 
+ UnsortedSet<T>::~UnsortedSet() { 
+  delete[] elements; 
+ }
+ 
