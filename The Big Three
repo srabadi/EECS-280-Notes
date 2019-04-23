@@ -1,0 +1,91 @@
+THE BIG THREE
+
+* by default a copy just copies over the members one by one
+* can return an object by value, which generally makes a copy
+
+  Person fun2() {
+    Person elise = { "Elise", 22, true };
+    return elise;
+  }
+  
+  int main() {
+    Person tali = func2();
+  }
+  
+* copy initialization of a class-type object invokes the copy constructor for the class
+  
+  class Example {
+  public:
+    Example(int x_in, double y_in) : x(x_in), y(y_in) {}
+    Example(const Example &other) : x(other.x), y(other.y) {
+      cout << "Example copy ctor: " << x << ", " << y << endl;
+    }
+    int get_x() const {
+      return x;
+    }
+    double get_y() const {
+      return y;
+    }
+    
+  private:
+    int x;
+    double y;
+  };
+  
+* copy constructor takes refernece to an existing object as the parameter
+* assignment copies into an existing object rather than a new one
+  * the overload must be a member function of the type of the left-hand side
+  
+  class Example {
+  public:
+    Exampe & operator=(const Example &rhs) {
+      x = rhs.x;
+      y = rhs.y;
+    }
+    ...
+  };
+  
+  * takes in an Example by reference to const, corresponding to the right-hand-side object
+  * return value will be the left-hand-side object itself (by reference)
+ * default copy constructor and assignment operators perform a memeber-by-member copy (not wanted)
+  * does a shallow copy: copies the pointer to the array of elements, rather than following it and        copying the array as a whole
+* need to make a deep copy: we make a copy of the underlying resource rather than having the two sets share the same resource
+  * copy constructor needs a custom implementation 
+  
+  template <typename T>
+  UnsortedSet<T>::UnsortedSet(const UnsortedSet &other) : 
+    elements(new T[other.capacity]), //create new array
+    capacity(other.capacity), //shallow copy non-resources
+    num_elements(other.num_elements) {
+      for (int i = 0; i < num_elements; ++i ) { //copy over the elements
+        elements[i] = other.elements[i];
+      }
+    }
+    
+* need a deep copy in assignment too
+  
+  template <typename T> 
+  UnsortedSet<T> & UnsortedSet<T>::operator=(const UnsortedSet &rhs) {
+    if (this == &rhs) { //self-assignment check
+      return *this;
+    }
+    delete[] elements; //delete old array
+    elements = new T[rhs.capacity]; //make new array of the required size
+    capacity = rhs.capacity; //shallow copy non-resources
+    for (int i = 0; i < num_elements; ++i) { //copy over the elements
+      elements[i] = rhs.elements[i];
+    }
+    return *this //return LHS object
+  }
+  
+* Law of the Big Three: if a custom version of any of the destructor, copy constructor, or assignment operator is required, almost certainly all three need to be custom
+  * destructor should free the resources
+  * copy constructor should make a deep copy of the resources and shallow copy the non-resources
+  * the assignment operator should:
+    * do a self-assignment check, free the old resources, make a deep copy of the rhs object's resources,     
+      shallow copy the non-resources from the rhs object, return the lhs object with *this
+* a base class should always declare the destructor to be virtual if the class will be used polymorphically
+
+  
+  
+  
