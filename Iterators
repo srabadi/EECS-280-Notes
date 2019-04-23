@@ -1,0 +1,44 @@
+ITERATORS
+
+* use an object called an iterator to iterate over the elements
+  * traversal by iterator (generalization of traversal by pointer)
+  * to traverse with an iterator, it must provide the following operations:
+    * dereference ( * )
+    * increment ( ++ )
+    * equality checks ( == or !=)
+    * also needs member functions begin() and end() that return an iterator to the start of the sequence        and "past-the-end" (nullptr), respectively
+* iterator is a class-type object that has the same interface as a pointer, so we overload the required operators
+
+  template <typename T>
+  class Iterator {
+    ...
+  private: 
+    Node *node_ptr;
+  };
+  
+* want to define Iterator as a member of the List template (public)
+* define the following constructors for Iterators
+  * an explicit default constructor that makes the iterator a past-the-end iterator (nullptr)
+  * a constructor that takes in a pointer to a node
+* a nested class can access private members of the outer class, but not vice versa
+  * to fix this use a friend declaration: a class gives an outside entity access to the class's private members
+  
+  template <typename T>
+  class List { 
+    ...
+  public:
+    class Iterator {
+      friend class List;
+      ...
+    };
+  };
+
+* friendship is given, not taken
+  * Example:
+    class C may declare F as a friend
+    friend class F;
+    this allows F to access the private members of C, but it does not allow C to access the private members of F
+* Iterators have a common interface with generic function that work on any sequence
+* an iterator that points to an invalid object is invalidated (can't dereference)
+
+    
