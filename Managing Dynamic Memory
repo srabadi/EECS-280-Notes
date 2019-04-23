@@ -1,3 +1,9 @@
 MANAGING DYNAMIC MEMORY
 
-* 
+* Resource Acquisition is Initialization (RAII, scope-based resource management)
+  * arrange for the constructor to allocate a resource 
+  * arrange for thedestructor to release the resource ( deletes the dynamic memory that it had previously allocated so memory does not leak)
+* RAII allows us the leverage automatic memory management and a class-type object to successfully manage a dyname array (or dynamic memory in general)
+
+    
+    
