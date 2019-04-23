@@ -1,0 +1,84 @@
+MEMORY MODELS AND DYNAMIC MEMORY
+
+* storage durations:
+  * static: the lifetime is essentially the whole program 
+    * global variables, static member variables, static local variables
+  * automatic (local): the lifetime is tied to a particular scope, such as a block of code
+    * function, loop, conditional
+  * dynamic: object is explicitly created and destroyed by the programmer
+* indirection through a pointer or reference can circumvent the rpotection of scope
+* new operator creates an object in the heap (make up the address space with the stack)
+  * default, value, and explicit initialization
+* what new does:
+  * allocates space for an object of the given type on the heap
+  * initializes the object according to the given initialization expression
+  * evaluates to the address of the newly created object
+* have to store the address somewhere to be able to use the new object
+  
+  int main() {
+  int *ptr = new int(3);
+  cout << *ptr << endl; //prints 3
+  ...
+  }
+
+* ends when the delete operator is applied to the object's address 
+  * evaluatesto the address value contained in the variable and follows this address and destroys the object at that address
+  * doesn't kill the pointer object, can still be used later on
+* what a new array does:
+  * allocates space for an array of the given number of elements on the heap
+  * initializes the array elements according to the initialization expression
+  * evaluates to the address of the first element of the newly created array
+* must apply delete[] for an array
+  * wrong deletion operator --> undefined behavior
+* when a class-type object is created a constructor is run to initialize it and a deconstructor is run to clean up its data
+* usual cause of a memory leak is orphaned memory or when we lose track of a dynamic object
+  
+  void func1() {
+    double *ptr = new double (3.0);
+  }
+  int main() {
+    func1();
+    ...
+  }
+
+* want to apply delete to the address before we lose track of it
+  
+  void func1() {
+    double *ptr = new double (3.0);
+    delete ptr;
+  }
+  int main() {
+    func1();
+    ...
+  }
+  
+* double free (delete) is where a origram deletes the same oject more than once
+
+  void func2() {
+    int x = 0;
+    int *ptr1 = new int(1);
+    int *ptr2 = new int(2);
+    //second int orphaned
+    ptr2 = ptr1;
+    
+    //delete applied to the same address twice --> undefined behavior
+    delete ptr1;
+    delete ptr2;
+  }
+
+* bad delete occurs when a delete operator is applied to the wrong kind of address (delete vs delete[])
+  * results in undefined behavior
+* deleting a dynamic object is not enough to avoid a memory error because if we keep around its address, we have a dangling pointer, or a pointer that points to a dead object
+  * dereference a dangling pointer --> undefined behavior
+
+  void func3() {
+    int *ptr = new int(42);
+    cout << *ptr << endl;
+    delete ptr;
+    
+    int *ptr2 = new int(3);
+    cout << *ptr << endl; //oops
+    delete ptr2;
+  }
+
+* set to nullptr after deleting which will result in a seg fault/bad access -> can debug
