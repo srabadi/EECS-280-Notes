@@ -1,3 +1,117 @@
 FUNCTION POINTERS AND FUNCTORS
 
-*
+* general strategy for avoiding code duplication in a procedural abstraction is to introduce parameters for the pieces that differ
+  * for a value that differs, add a function parameter
+  * add parameter to generalize and supply in main with desired argument
+* when the type differs, we make the function a template and introduce a template parameter
+
+  int max_int(int x, int y) {
+    return x < y ? : x;
+  }
+  Card max_card(const Card &x, const Card &y) {
+    return x < y ? y : x;
+  }
+  template <typename T> //add template parameter to generalize
+  T max(const T &x, const T &y) { //pass objects of template-parameter type by reference
+    return x < y ? y : x;
+  }
+  
+* once we have a function, the compiler translates it into machine code, which is placed in memory in the text segment when the program runs 
+  * since the code is in memory, we can construct a pointer to it:
+    
+    bool (*func)(int) = &is_odd;
+    func = &is_even;
+  
+* apply the address-of operator to a function to obtain its address, just like an object
+  * address-of operator is optional, the compiler inserts the operator for us
+* can call a function through a pointer by first dereferencing the pointer
+  
+  bool (*func)(int) = is_odd;
+  (*func)(-2); //returns false
+  
+  * the compiler can also implicitly insert this dereference
+* function pointer syntax: bool (*func)(int);
+* to declare an appropriate function pointer:
+  * start with a function signature
+    int max_int(int x, int y);
+  * remove the parameter names, which serve only as documentation in a declaration
+    int max_int(int, int);
+  * replace the function name with a variable name and the * symbol to indicate it is a pointer, surrounded by parantheses
+    int (*func)(int, int);
+  * result is that func is a pointer to a function that takes in 2 ints and returns an int
+* generic any_of() that is parameterized both by an iterator type as well as a function to test an element:
+  
+  template <typename T>
+  bool any_of(Iter_type begin, Iter_type end, bool (*func)(int)) {
+    for (Iter_type it = begin; it != end; ++it) {
+      if (func(*it)) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  * compiler automatically dereferences the pointer (to a function) to ger its code
+* compiler implicitly takes the address of a function when we pass it to a function pointer
+* predicates: functions that take in an iterm and return a truth value
+* fucntor: a class type that provides the same interface as a function
+  * can be called if the class overloads the function-call operator
+  
+  class GreaterN {
+  public:
+    //EFFECTS: creates a GreaterN with the given threshold
+    GreaterN(int threshold_in) : threshold(threshold_in) {}
+    //EFFECTS: returns whether or not the given value is greater than this GreaterN's threshold
+    bool operator()(int x) const {
+      return x > threshold;
+    }
+  private:
+    int threshold;
+  };
+    
+* function-call operator must be overloaded as a member function, so that it has an implicit this pointer that allows us to access a memebr variable 
+* declated the this pointer as a pointer to const, since the function does not modify the GreaterN object
+* objects declared as local variables and initialized them vy calling the constructor
+* object can be used as the first operand of the function-call operator
+  * pass whatever arguments are needed to invoke the overload memeber function, and as with any non-static member function, the this parameter is implicitly passed
+  
+  template <typename Iter_type, typename Predicate>
+  bool any_of (Iter_type begin, Iter_type end, Predicate pred) {
+    for (Iter_type it = begin; it != end; ++i) {
+      if (pred(*it)) {
+        return true;
+      }
+    }
+    return false;
+  }
+* functors are generally passed by value
+* comparator: takes two objects and returns a value that indicates how they compare to each other
+
+  template <typename Iter_type, typename Comparator>
+  Iter_type max_element(Iter_type begin, Iter_type end, Comparator less) {
+    Iter_type max_so_far = begin;
+    for (; begin != end; ++begin) {
+      if (less(*max_so_far, *begin)) {
+        max_so_far = begin;
+      }
+    }
+    return max_so_far;
+  }
+  
+* comparator can be written as a function
+
+  class DuckNameLess {
+  public:
+    bool operator()(const Duck &d1, const Duck &d2) const {
+      return d1.get_name() < d2.get_nam();
+    }
+  };
+  
+* can allow compiler to deduce iterator type by using the auto keyword
+* range-based for loop: special syntax for iterating over sequences that support traversal by iterator
+  
+  for (<type> <variable> : <sequence>)
+    <body>
+ * modify a copy of eachelement rather than an element itself 
+  * to avoid making a copy, declare the loop variable to be a reference
+  
