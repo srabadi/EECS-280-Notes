@@ -1,0 +1,7 @@
+SOLVING PROBLEMS WITH RECURSION
+
+* base cases: identify cases we can solve directly
+* recursive case: determine how to express a general case in terms of smaller subproblems
+* pancake stack problem solving
+* tower of Hanoi puzzle
+* counting change example
