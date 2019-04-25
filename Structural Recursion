@@ -1,0 +1,84 @@
+STRUCTURAL RECURSION
+
+* structural recursion: use recursion in defining the representtion of an abstract data type
+  * example, linked list
+    * a linked list can be defined recursively as either an empty list or a datum followed by a smaller list
+      
+      int length(const Node *list) {
+        if (list == nullptr) { //empty list
+          return 0;
+        }
+        else { //non-empty list
+          return 1 + length(list->next); //list->next is a smaller list
+          //the length of a non-empty list is one more than the length of the rest of the list
+        }
+      }
+
+* a list is a linear_recursive data structre: each non-empty list is subdivided into a datum and a single smaller list
+* a tree is a data structure that is naturally tree recursive
+  * non-empty tree is subdivided into a datum and several smaller trees
+* binary trees: non-empty trees are subdivided into exactly two smaller trees
+  * right and left subtrees
+* the root is the node that originates the branching structure, pictured at the top of the tree
+* non-empty tree consists if a parent node and two children nodes (left and right, sibilings when they have the same parent)
+* a node whose children are all empty is a leaf
+* the size of a tree is the number of elements it contains
+  * empty tree = 0
+  * non-empty tree = size of the left child + size of the right child + 1 for root datum
+* the height of a tree is the number of levels at which it has elements, or the length of the longest path from the root to a leaf node
+  
+  int size(const Node *tree) {
+    if (!tree) {
+      return 0;
+    }
+    else {
+      return 1 + size(tree->left) + size(tree->right);
+    }
+  }
+  
+* tree traversals 
+  * preorder traversal: prints root datum before any of the data in the children
+  
+    void print(const Node *tree) {
+      if (tree) {
+        cout << tree->datum << endl;
+        print(tree->left);
+        print(tree-right);
+      }
+    }
+    
+  * inorder traversal: print statements results in aternate orderings
+    
+    void print(const Node *tree) {
+      if (tree) {
+        print(tree->left);
+        cout << tree->datum << endl;
+        print(tree-right);
+      }
+    }
+    
+  * postorder traversal: prints the root datum after the data in the children
+    
+    void print(const Node *tree) {
+      if (tree) {
+        print(tree->left);
+        print(tree-right);
+        cout << tree->datum << endl;
+      }
+    }
+    
+* binary search tree (BST) is a binary tree whose elements are stored in an order that maintains a sorting invariant 
+  * either empty or
+  * a root datum with two subtrees such that:
+    1. the two subtrees are themselves binary search trees
+    2. every element in the left subtree is strictly less than the root datum
+    3. every element in the right subtree is strictly greater than the root datum
+* searching the BST can be done in time proportional to the height of the tree rather than the size
+* declare functions as a static member function to eliminate the this pointer, use a helper function to implement it
+* a map is a data structure that maps keys to values
+  * an associative data structure since it associates a value with each key
+  * map<string, int>
+  * each key is associated with at most one value
+* a pair stores a first and second item
+* use range based for loops to iterate over both the vector and the map, declaring a type-deduced reference to each element to avoid making a copy
+
