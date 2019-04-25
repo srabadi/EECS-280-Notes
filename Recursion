@@ -1,3 +1,73 @@
 RECURSION
 
-*
+* recursion: definition uses itself as a part of its definition
+
+  int factorial(int n) {
+    if (n == 0 || n == 1) {
+      return 1;
+    } 
+    else {
+      return n * factorial(n - 1);
+    }
+  }
+
+* recursive definition works because each invocation of the function getrs its own activation record, and the body of the function is executed within the context of that activation record
+* recurisive abstraction requires:
+  * bases cases: cases we implement directly without recursion
+  * recursive cases: break down the problem into subproblems that are similar to the problem but "smaller", meaning closer to a base case
+
+  void print_numbers(int start, int end) {
+    if (start == end) {
+      return;
+    }
+    cout << start << endl;
+    print_numbers(start + 1, end);
+  }
+
+* think of an algorithm for lifting a box of heavy books
+  
+  void lift_box(Box &box) {
+    if (too_hesvy(box)) {
+      Book book = remove_book(box);
+      lif_box(box);
+    }
+    else {
+      move_box(box);
+    }
+  }
+
+* tail recursion: the recursive call is the last thing that happens in the function and no work is done after the tail call returns
+  * no need to retain the activation record of the caller, and it can be dicarded
+   
+  void reverse(int *left, int *right) {
+    if (left < right) {
+      int temp = *left;
+      *left = *right;
+      *right = temp;
+      reverse(left + 1, right - 1);
+    }
+  }
+
+* tail-call optimization (TCO): the activating revord for the tail call reuses the space of the caller's activation record 
+* to be tail-recursive the computation must do all its work in the active flow of the computation, before making a recursive call
+
+  int factorial(int n, int resultSoFar) {
+    if (n == 0 || n == 1) {
+      return resultSoFar;
+    }
+    else {
+      return factorial(n - 1, n * resultSoFar);
+    }
+  }
+  
+* helper functions are a common pattern for tail-recursive functions that requuire a seed value
+* linear recurive: if it is recursive but eaxh invocation of the function makes at most one recursive call
+  * reduces each recursive case to a single subproblem
+* a function is tail recursive if it is linear recursive and every recursive call is the last think that happens in the invocation that makes the recursive call
+* tree recursive: a single invocation of the function can make more than one recursive call
+  * such a function subdivides a recurive case into many subproblems
+* both iteration and recursion have the same computational power
+  * an iteratice algorithm can be converted to a tail-recursive implementation and vice versa
+  * a non-tail recursive computation can also be rewritten iteratively; hoever the iterative version may require explicit storage
+  * the non-tail-recursive algorithm can store data in multiple activation records, while the iterative mone only has a single activation record to work with, so it may need an explicit data structure to store its date
+    
